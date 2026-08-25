@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<title>BLITZ! 2</title>
+
+
+<style>
+:root{--bg:#05060a;--panel:#0d1119;--line:#252c3b;--muted:#8f98aa;--white:#fff;--accent:#42ff88}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:
+radial-gradient(circle at 50% 42%,#17202d 0%,#090c12 34%,#05060a 72%);
+color:var(--white);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#app{height:100dvh;width:100%;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;touch-action:manipulation}
+#app:before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 180deg,transparent,#ffffff08,transparent 25%);animation:spin 18s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo{position:absolute;top:24px;font-size:31px;font-weight:1000;letter-spacing:4px;text-shadow:0 0 22px #fff4;z-index:2}
+#best{position:absolute;top:68px;font-size:12px;color:#aeb6c5;letter-spacing:1px;z-index:2}
+#sound{position:absolute;right:16px;top:18px;background:#111722dd;color:#fff;border:1px solid #30394b;border-radius:13px;padding:9px 11px;font-weight:850;z-index:3;backdrop-filter:blur(12px)}
+#time{font-size:31px;font-weight:1000;letter-spacing:-1px;transition:transform .15s}
+#hint{position:absolute;bottom:42px;font-size:15px;color:#aeb6c5;padding:0 24px;z-index:2}
+#record{position:absolute;bottom:82px;font-size:12px;color:#697386;letter-spacing:1px}
+#medal{position:absolute;bottom:105px;font-size:14px;font-weight:900;z-index:2}
+#shareArea{position:absolute;bottom:17px;width:100%;z-index:3}
+#shareBtn{display:none;background:#fff;color:#05060a;border:0;border-radius:13px;padding:9px 15px;font-weight:900}
+.ready{background:var(--accent)!important;box-shadow:inset 0 0 130px #fff3}
+.ready #time{font-size:64px;color:#031108;text-shadow:0 2px 0 #fff6;transform:scale(1.04)}
+.ready #hint{color:#031108;font-weight:950}
+.ready .logo{color:#031108;text-shadow:none}
+@media(prefers-reduced-motion:reduce){#app:before{animation:none}}
+</style>
+
+<style>
+:root{--cyan:#00f6ff;--pink:#ff2bd6;--lime:#5cff4a;--bg:#03030a}
+body{background:#03030a}
+#app{background:
+radial-gradient(circle at 20% 20%,#00f6ff12,transparent 28%),
+radial-gradient(circle at 80% 70%,#ff2bd612,transparent 30%),
+radial-gradient(circle at 50% 45%,#15152b 0%,#050510 45%,#020207 100%)}
+#app:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,#fff000 0,#fff000 1px,transparent 1px,transparent 5px);opacity:.025}
+.logo{color:#fff;text-shadow:0 0 5px #fff,0 0 15px var(--cyan),0 0 35px var(--pink);animation:neonPulse 2s ease-in-out infinite alternate}
+@keyframes neonPulse{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+#time{text-shadow:0 0 8px #fff,0 0 24px var(--cyan),0 0 50px var(--pink)}
+#best{color:#a8faff;text-shadow:0 0 10px #00f6ff88}
+#hint{color:#c9d0ff;text-shadow:0 0 12px #00f6ff55}
+#record{color:#ff8dea;text-shadow:0 0 10px #ff2bd688}
+.ready{background:
+radial-gradient(circle,#d8fff2 0%,#5cff4a 25%,#00d94c 55%,#06150a 100%)!important;
+box-shadow:inset 0 0 100px #fff,0 0 80px #5cff4a,0 0 150px #00f6ff!important;
+animation:readyFlash .18s ease-out}
+@keyframes readyFlash{0%{filter:brightness(2.5)}100%{filter:brightness(1)}}
+.ready #time{color:#001006;text-shadow:0 0 8px #fff,0 0 30px #fff}
+#sound{background:#090b16;color:#fff;border:1px solid #00f6ff;box-shadow:0 0 12px #00f6ff55, inset 0 0 12px #ff2bd622}
+#shareBtn{box-shadow:0 0 20px #00f6ff88}
+</style>
+
+<style>
+:root{--ice:#8ffcff;--violet:#8b5cff;--blue:#2b7fff;--void:#02030a}
+body{background:var(--void);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{background:
+radial-gradient(circle at 50% 38%,#1b2448 0%,#0b1023 28%,#030611 58%,#010208 100%);
+}
+#app:before{content:"";position:absolute;inset:0;background:
+linear-gradient(90deg,transparent 49.8%,#8ffcff12 50%,transparent 50.2%),
+linear-gradient(0deg,transparent 49.8%,#8ffcff10 50%,transparent 50.2%);
+background-size:90px 90px;transform:perspective(500px) rotateX(55deg) scale(2);transform-origin:50% 100%;opacity:.28;animation:gridMove 5s linear infinite}
+@keyframes gridMove{to{background-position:0 90px}}
+.logo{font-size:29px;letter-spacing:7px;color:#dffcff;text-shadow:0 0 8px #fff,0 0 24px var(--ice),0 0 50px var(--violet);font-weight:1000}
+#best{color:#9eeaff;text-shadow:0 0 12px #2b7fff}
+#time{font-weight:1000;text-shadow:0 0 8px #fff,0 0 20px var(--ice),0 0 50px var(--violet)}
+#hint{color:#b9c8ed;letter-spacing:.5px}
+#record{color:#7f91c2}
+#sound{background:#080d1cdd;border:1px solid #6eeaff;color:#dffcff;box-shadow:0 0 20px #2b7fff44;backdrop-filter:blur(12px)}
+.ready{background:radial-gradient(circle,#efffff 0%,#8ffcff 18%,#2b7fff 45%,#351e92 72%,#05020e 100%)!important;box-shadow:inset 0 0 100px #fff,0 0 80px #8ffcff,0 0 180px #8b5cff!important}
+.ready #time{color:#001018;text-shadow:0 0 8px #fff,0 0 30px #fff}
+#shareBtn{background:#eaffff;color:#02030a;box-shadow:0 0 25px #8ffcff88}
+</style>
+
+<style>
+body{background:#01040a}
+#app{background:
+radial-gradient(ellipse at 50% 45%,#173c52 0%,#0a1728 25%,#020812 60%,#010207 100%);
+perspective:900px}
+#app:before{content:"";position:absolute;inset:8% 7%;border:1px solid #65faff55;border-radius:40px;box-shadow:inset 0 0 50px #00f6ff14,0 0 35px #8b5cff22;transform:rotateX(1deg);pointer-events:none}
+#app:after{content:"";position:absolute;left:12%;right:12%;top:20%;height:55%;background:linear-gradient(transparent 0%,#8ffcff08 45%,transparent 55%);border-top:1px solid #8ffcff22;border-bottom:1px solid #8ffcff11;animation:hscan 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes hscan{0%,100%{transform:translateY(-80px);opacity:.2}50%{transform:translateY(80px);opacity:1}}
+.logo{color:#e9ffff;text-shadow:0 0 4px #fff,0 0 12px #8ffcff,0 0 30px #8b5cff;letter-spacing:8px}
+#time{color:#dfffff;text-shadow:0 0 5px #fff,0 0 16px #8ffcff,0 0 35px #2b7fff;filter:drop-shadow(0 0 14px #8ffcff)}
+#best{color:#9efaff}
+#hint{color:#bfe9f5}
+#record{color:#8da5ba}
+#sound{background:#06131c99;border:1px solid #8ffcff99;color:#dfffff;box-shadow:0 0 22px #8ffcff33,inset 0 0 20px #8ffcff11}
+#medal{color:#dfffff;text-shadow:0 0 14px #8ffcff}
+#shareBtn{background:#dfffff;color:#021017;box-shadow:0 0 28px #8ffcff99}
+.ready{background:radial-gradient(circle,#ffffff 0%,#bfffff 10%,#58faff 28%,#2878ff 55%,#251064 85%,#01030a 100%)!important;box-shadow:inset 0 0 120px #fff,0 0 90px #8ffcff,0 0 180px #8b5cff!important}
+.ready #time{color:#001017;text-shadow:0 0 5px #fff,0 0 24px #fff}
+</style>
+
+<style>
+:root{--bg:#02040b;--ice:#8ffcff;--violet:#8b5cff;--blue:#2b7fff;--green:#59ff87;--pink:#ff4de1}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;user-select:none}
+button{font:inherit}.app{height:100dvh;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 42%,#162b45 0%,#081321 32%,#02050d 72%,#010207 100%)}
+.app:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 49.7%,#8ffcff0b 50%,transparent 50.3%),linear-gradient(0deg,transparent 49.7%,#8ffcff08 50%,transparent 50.3%);background-size:80px 80px;transform:perspective(500px) rotateX(55deg) scale(2);transform-origin:50% 100%;animation:grid 5s linear infinite;pointer-events:none}
+@keyframes grid{to{background-position:0 80px}}
+.logo{position:absolute;top:18px;left:20px;font-size:26px;font-weight:1000;letter-spacing:6px;color:#eaffff;text-shadow:0 0 7px #fff,0 0 20px var(--ice),0 0 40px var(--violet);z-index:4}
+.topBtns{position:absolute;right:14px;top:14px;z-index:5;display:flex;gap:7px}.topBtns button,.ghost{background:#07111ccc;color:#dfffff;border:1px solid #5feaff66;border-radius:12px;padding:9px 11px;font-weight:850;backdrop-filter:blur(10px)}
+.screen{position:absolute;inset:0;display:none;z-index:2}.screen.active{display:flex}.home{align-items:center;justify-content:center;text-align:center}.homeBox{width:min(90%,440px);padding:35px 24px;border:1px solid #7deeff33;border-radius:30px;background:#07111caa;box-shadow:inset 0 0 50px #8ffcff0b,0 0 60px #2b7fff22;backdrop-filter:blur(14px)}
+.homeTitle{font-size:48px;font-weight:1000;letter-spacing:5px;text-shadow:0 0 10px #fff,0 0 30px var(--ice),0 0 60px var(--violet)}.sub{color:#a9bdd5;margin:8px 0 25px}
+.bigBtn{width:100%;border:1px solid #8ffcff;background:linear-gradient(135deg,#eaffff,#8ffcff);color:#001018;border-radius:18px;padding:17px;font-size:19px;font-weight:1000;box-shadow:0 0 30px #8ffcff55;margin-bottom:10px}.secondary{background:#081321dd;color:#dfffff;border-color:#5feaff55;box-shadow:none}
+.statsRow{display:flex;justify-content:space-between;color:#9db1c8;font-size:12px;margin-top:15px}
+.game{align-items:center;justify-content:center;text-align:center}.gameHeader{position:absolute;top:62px;left:20px;right:20px;display:flex;justify-content:space-between;color:#a9bdd5;font-size:12px;font-weight:850}.gameCenter{font-size:31px;font-weight:1000}.gameHint{position:absolute;bottom:28px;left:20px;right:20px;color:#b8cbe0;text-align:center}.ready{background:radial-gradient(circle,#fff 0%,#bfffff 10%,#59ff87 27%,#2b7fff 56%,#2d156e 82%,#010207 100%)!important;box-shadow:inset 0 0 120px #fff,0 0 100px #59ff87,0 0 200px #8b5cff!important}.ready .gameCenter{color:#001108;font-size:66px;text-shadow:0 0 8px #fff}.panel{padding:75px 18px 25px;overflow:auto}.panelCard{max-width:500px;margin:auto;background:#07111ccc;border:1px solid #5feaff33;border-radius:25px;padding:22px;backdrop-filter:blur(14px)}.panel h2{margin:0 0 15px;font-size:26px}.statBig{font-size:38px;font-weight:1000}.muted{color:#9db1c8}.bar{height:9px;background:#172538;border-radius:9px;overflow:hidden;margin:10px 0 18px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ice),var(--violet));width:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{padding:15px;border:1px solid #4fe7ff22;border-radius:16px;background:#0a1522aa}.tile b{display:block;font-size:22px}.medal{font-size:30px}.achievement{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #ffffff0d}.locked{opacity:.35;filter:grayscale(1)}.leader{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #ffffff10}.share{margin-top:12px}.danger{color:#ff9ceb}
+#best{position:absolute;top:50px;left:20px;color:#9eeaff;font-size:11px;z-index:4}.motivation{position:absolute;bottom:112px;left:20px;right:20px;font-size:15px;font-weight:900;color:#dffcff;text-shadow:0 0 15px #8ffcff55;z-index:3}
+.ready .motivation{color:#001108}
+</style>
+<style>
+.shopBtn{width:100%;padding:14px;margin:7px 0;border-radius:15px;border:1px solid #55efff55;background:#081421;color:#eaffff;text-align:left;font-weight:850}
+.shopBtn span{float:right;color:#8ffcff}.proCard{border:1px solid #8b5cff88;background:linear-gradient(135deg,#140b2a99,#061624dd);box-shadow:0 0 35px #8b5cff22}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#8b5cff22;color:#d8c8ff;border:1px solid #8b5cff55;font-size:11px;font-weight:900}
+.ad{margin:12px 0;padding:10px;border:1px dashed #657086;border-radius:12px;color:#7f8da3;font-size:11px}
+</style>
+<style id="blitz-home-upgrade">
+:root{
+  --cyan:#71f7ff; --blue:#5b8cff; --violet:#b56cff; --pink:#ff4fd8;
+  --bg:#03050d; --panel:rgba(7,12,27,.78);
+}
+body{
+  background:
+    radial-gradient(circle at 50% 10%, rgba(91,140,255,.18), transparent 34%),
+    radial-gradient(circle at 15% 85%, rgba(181,108,255,.12), transparent 30%),
+    #03050d !important;
+}
+#home{
+  position:relative; overflow:hidden;
+  min-height:100vh;
+  background:
+    linear-gradient(180deg,rgba(3,5,13,.15),rgba(3,5,13,.82)),
+    radial-gradient(circle at 50% 35%,rgba(113,247,255,.09),transparent 32%);
+}
+#home:before,#home:after{
+  content:""; position:absolute; inset:-20%; pointer-events:none; opacity:.25;
+  background-image:linear-gradient(rgba(113,247,255,.07) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(113,247,255,.07) 1px,transparent 1px);
+  background-size:34px 34px; transform:perspective(500px) rotateX(62deg) translateY(35%);
+}
+#home:after{filter:blur(2px);opacity:.12}
+.blitzHero{
+  position:relative; z-index:2; text-align:center; padding:28px 12px 18px;
+}
+.blitzLogo{
+  font-size:clamp(64px,18vw,112px); line-height:.8; font-weight:1000;
+  letter-spacing:-.08em; margin:12px 0 16px;
+  color:#fff;
+  text-shadow:0 0 8px var(--cyan),0 0 28px var(--cyan),0 0 70px var(--violet);
+  animation:logoPulse 2.8s ease-in-out infinite;
+}
+.blitzTag{
+  display:inline-flex; align-items:center; gap:8px; padding:7px 13px;
+  border:1px solid rgba(113,247,255,.38); border-radius:999px;
+  background:rgba(8,20,40,.6); color:#cfffff; font-size:11px;
+  font-weight:900; letter-spacing:.16em; text-transform:uppercase;
+  box-shadow:0 0 22px rgba(113,247,255,.12);
+}
+.blitzHeroSub{color:#8f9bb3;margin:12px auto 0;max-width:420px;font-size:13px}
+.blitzStats{
+  position:relative;z-index:3; display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;max-width:520px;margin:8px auto 16px;padding:0 12px;
+}
+.blitzStat{
+  padding:12px 7px;border-radius:16px;border:1px solid rgba(113,247,255,.16);
+  background:rgba(7,12,27,.72);backdrop-filter:blur(12px);
+}
+.blitzStat b{display:block;color:#fff;font-size:20px}.blitzStat span{color:#73809a;font-size:10px}
+.blitzMain{
+  position:relative;z-index:3;max-width:520px;margin:auto;padding:0 14px;
+}
+#startBlitzBtn{
+  position:relative;width:100%;padding:20px 18px;border:0;border-radius:20px;
+  color:#031018;font-size:21px;font-weight:1000;letter-spacing:.08em;
+  background:linear-gradient(110deg,var(--cyan),#fff,var(--violet));
+  box-shadow:0 0 18px rgba(113,247,255,.45),0 0 65px rgba(181,108,255,.22);
+  overflow:hidden;
+}
+#startBlitzBtn:after{
+  content:"";position:absolute;inset:0;transform:translateX(-110%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:shine 2.3s infinite;
+}
+.blitzQuick{
+ display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px;
+}
+.blitzQuick button{
+ min-height:58px;border-radius:16px;border:1px solid rgba(113,247,255,.18);
+ background:rgba(7,12,27,.76);color:#e9f8ff;font-weight:850;
+ box-shadow:inset 0 0 20px rgba(91,140,255,.04);
+}
+.blitzQuick button:active,#startBlitzBtn:active{transform:scale(.98)}
+.blitzChallenge{
+ margin:14px 0;padding:15px;border-radius:18px;border:1px solid rgba(181,108,255,.24);
+ background:linear-gradient(135deg,rgba(181,108,255,.11),rgba(91,140,255,.05));
+ text-align:left;
+}
+.blitzChallenge .row{display:flex;justify-content:space-between;align-items:center}
+.blitzChallenge strong{color:#fff}.blitzChallenge small{color:#7f8da6}
+.blitzChallenge .progress{height:7px;border-radius:99px;background:#11192b;margin-top:11px;overflow:hidden}
+.blitzChallenge .progress i{display:block;width:64%;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 12px var(--cyan)}
+.blitzBottom{color:#4f5b73;text-align:center;font-size:10px;padding:8px 0 22px}
+@keyframes logoPulse{50%{filter:brightness(1.2);transform:translateY(-2px)}}
+@keyframes shine{55%,100%{transform:translateX(110%)}}
+</style>
+
+<style id="blitz-achievement-upgrade">
+#achievements{display:grid;gap:9px;margin:10px 0 18px}
+.achievement{
+  display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;
+  padding:11px 12px;border-radius:15px;
+  border:1px solid rgba(113,247,255,.2);
+  background:linear-gradient(100deg,rgba(9,23,39,.92),rgba(12,9,29,.8));
+  box-shadow:0 0 20px rgba(113,247,255,.05)
+}
+.achievement .medal{font-size:25px;text-align:center}
+.achievement b{color:#f4fbff;font-size:13px}.achievement small{color:#8b9ab1;font-size:10px}
+.achievement.locked{opacity:.42;filter:saturate(.35)}
+.achievement.unlocked{border-color:rgba(113,247,255,.52);box-shadow:0 0 20px rgba(113,247,255,.12)}
+.achievement .reward{color:#9ffcff;font-weight:1000;font-size:11px}
+.blitzToast{
+ position:fixed;z-index:9999;left:50%;top:18px;transform:translate(-50%,-140%);
+ width:min(92vw,420px);padding:14px 16px;border-radius:18px;
+ border:1px solid rgba(113,247,255,.5);
+ background:linear-gradient(135deg,rgba(5,18,31,.97),rgba(28,9,46,.97));
+ box-shadow:0 0 35px rgba(113,247,255,.22);
+ color:#fff;text-align:center;transition:transform .35s ease
+}
+.blitzToast.show{transform:translate(-50%,0)}
+.blitzToast .t1{font-size:11px;letter-spacing:.12em;color:#8ffcff;font-weight:1000}
+.blitzToast .t2{font-size:18px;font-weight:1000;margin-top:3px}
+.blitzToast .t3{font-size:12px;color:#9aa8bf;margin-top:3px}
+</style>
+
+<style id="blitz-progression-upgrade">
+.blitzProgressCard{margin:12px 0;padding:15px;border-radius:18px;border:1px solid rgba(255,79,216,.22);background:linear-gradient(135deg,rgba(255,79,216,.08),rgba(91,140,255,.06))}
+.comboLine{display:flex;justify-content:space-between;align-items:center}.comboLine b{font-size:18px;color:#fff}.comboFire{color:#ff8ae8;font-weight:1000}
+.dailyReward{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-top:10px;padding:12px;border-radius:14px;background:rgba(3,10,23,.65);border:1px solid rgba(113,247,255,.14)}
+.dailyReward button{border:0;border-radius:12px;padding:9px 12px;font-weight:900;background:linear-gradient(100deg,#71f7ff,#b56cff);color:#06101a}
+.dailyReward button:disabled{opacity:.35}
+.xpPop{position:fixed;z-index:10000;left:50%;bottom:18%;transform:translate(-50%,30px);opacity:0;color:#fff;font-size:25px;font-weight:1000;text-shadow:0 0 16px #71f7ff;transition:.3s;pointer-events:none}.xpPop.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body><div id="xpPop" class="xpPop">+XP</div><div id="blitzToast" class="blitzToast"><div class="t1">🏅 ACHIEVEMENT FREIGESCHALTET</div><div class="t2" id="toastTitle"></div><div class="t3" id="toastReward"></div></div>
+<div class="app" id="app">
+<div class="logo">BLITZ!</div><div id="best"></div>
+<div class="topBtns"><button id="soundBtn">🔊</button><button id="backBtn" class="ghost">☰</button></div>
+
+<section class="screen home active" id="home">
+<div class="blitzHero">
+  <div class="blitzTag">⚡ REFLEX // ONLINE</div>
+  <div class="blitzLogo">BLITZ</div>
+  <div class="blitzHeroSub">Wie schnell reagierst du wirklich?</div>
+</div>
+<div class="blitzStats">
+  <div class="blitzStat"><b id="heroBest">—</b><span>BESTZEIT</span></div>
+  <div class="blitzStat"><b id="heroLevel">1</b><span>LEVEL</span></div>
+  <div class="blitzStat"><b id="heroXP">0</b><span>XP</span></div>
+</div>
+<div class="blitzMain">
+  <button id="startBlitzBtn">⚡ BLITZ STARTEN</button>
+  <div class="blitzQuick">
+    <button id="heroDaily">🎯 TAGES-CHALLENGE</button>
+    <button id="heroRank">🏆 RANGLISTE</button>
+  </div>
+  <div class="blitzChallenge">
+    <div class="row"><strong>🔥 Heutige Challenge</strong><small>5 Runden</small></div>
+    <div style="margin-top:6px;color:#c8d3e6;font-size:13px">Schaffe einen Schnitt unter <b>300 ms</b>.</div>
+    <div class="progress"><i></i></div>
+  </div>
+  
+<div class="blitzProgressCard">
+  <div class="comboLine"><b>🔥 COMBO</b><span class="comboFire" id="heroCombo">0x</span></div>
+  <div style="color:#7f8da6;font-size:11px;margin-top:4px">Schnelle Treffer hintereinander erhöhen deinen XP-Multiplikator.</div>
+  <div class="dailyReward">
+    <div><b style="color:#fff">🎁 Tagesbonus</b><br><small style="color:#8190a8">Einmal täglich +50 XP</small></div>
+    <button id="claimDaily">ABHOLEN</button>
+  </div>
+</div>
+<div class="blitzBottom">NEON REACTION ENGINE • 5 ROUNDS • 100% REFLEX</div>
+</div>
+
+<div class="homeBox">
+<div class="homeTitle">BLITZ!</div><div class="sub">REACTION CORE · FUTURE 2050</div>
+<button class="bigBtn" id="playBtn">⚡ SPIELEN</button>
+<button class="bigBtn secondary" id="dailyBtn">🎯 TAGES-CHALLENGE</button>
+<div class="statsRow"><span id="homeLevel">LEVEL 1</span><span id="homeXp">0 XP</span><span id="homeBest">BEST —</span></div>
+</div></section>
+
+<section class="screen game" id="game">
+<div class="gameHeader"><span id="roundLabel">RUNDE 1 / 5</span><span id="modeLabel">BLITZ PUR</span></div>
+<div class="gameCenter" id="gameCenter">TIPPEN ZUM START</div>
+<div class="motivation" id="motivation"></div>
+<div class="gameHint" id="gameHint">5 Runden · Keine Ausreden. ⚡</div>
+</section>
+
+<section class="screen panel" id="result">
+<div class="panelCard"><div class="muted">MATCH ABGESCHLOSSEN</div><h2 id="resultTitle">Dein Ergebnis</h2>
+<div class="statBig" id="resultTime">—</div><div class="medal" id="resultMedal"></div>
+<p id="resultMotivation" class="muted"></p><div class="bar"><i id="xpBar"></i></div><div id="xpGain"></div>
+<button class="bigBtn share" id="shareBtn">👥 FREUND HERAUSFORDERN</button><button class="bigBtn secondary" id="againBtn">⚡ NOCHMAL</button><button class="bigBtn secondary" id="resultHome">⌂ MENÜ</button>
+</div></section>
+
+<section class="screen panel" id="profile"><div class="panelCard">
+<h2>🧠 MEIN PROFIL</h2><div class="statBig" id="profileLevel"></div><p id="profileRank" class="muted"></p>
+<div class="grid"><div class="tile"><b id="pBest">—</b><span class="muted">Bestzeit</span></div><div class="tile"><b id="pAvg">—</b><span class="muted">Schnitt</span></div><div class="tile"><b id="pGames">0</b><span class="muted">Matches</span></div><div class="tile"><b id="pPerfect">0</b><span class="muted">Perfekte</span></div></div>
+<h2 style="margin-top:24px">🏅 ACHIEVEMENTS</h2><p class="muted">Bestimmte Zeiten knacken = XP-Belohnung. Jede Belohnung gibt es nur einmal.</p><div id="achievements"></div><button class="bigBtn secondary" id="profileHome">⌂ MENÜ</button>
+</div></section>
+
+<section class="screen panel" id="leaderboard"><div class="panelCard">
+<h2>🏆 BESTENLISTE</h2><p class="muted">Lokal gespeichert · Online-Rangliste wird aktiviert, sobald ein Server verbunden ist.</p>
+<div id="leaders"></div><button class="bigBtn secondary" id="leaderHome">⌂ MENÜ</button>
+</div></section>
+
+<section class="screen panel" id="daily"><div class="panelCard">
+<h2>🎯 TAGES-CHALLENGE</h2><p id="dailyText" class="muted"></p><div class="statBig" id="dailyTarget"></div>
+<div class="bar"><i id="dailyBar"></i></div><p id="dailyStatus"></p><button class="bigBtn" id="dailyPlay">⚡ CHALLENGE STARTEN</button><button class="bigBtn secondary" id="dailyHome">⌂ MENÜ</button>
+</div></section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id), app=$("app");
+const screens=["home","game","result","profile","leaderboard","daily"];
+const state=JSON.parse(localStorage.getItem("blitz_state")||'{"xp":0,"level":1,"best":0,"games":0,"perfect":0,"history":[],"daily":{},"achievements":{}}'); state.achievements=state.achievements||{}; state.combo=state.combo||0; state.lastDaily=state.lastDaily||"";
+let round=0,scores=[],phase="home",timer=null,start=0,sound=true,audio=null,dailyMode=false;
+
+function save(){localStorage.setItem("blitz_state",JSON.stringify(state))}
+function show(name){screens.forEach(x=>$(x).classList.toggle("active",x===name));phase=name;updateHome()}
+function audioReady(){if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume()}
+function beep(f,d=100){if(!sound)return;audioReady();let o=audio.createOscillator(),g=audio.createGain();o.frequency.value=f;o.type="sine";g.gain.setValueAtTime(.001,audio.currentTime);g.gain.exponentialRampToValueAtTime(.14,audio.currentTime+.01);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d/1000);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d/1000+.02)}
+function vib(x){navigator.vibrate&&navigator.vibrate(x)}
+function level(){return Math.floor(state.xp/1000)+1}
+function rank(){let l=level();return l>=50?"👑 HUMAN LIGHTNING":l>=25?"⚡ BLITZ-MASTER":l>=10?"🚀 REFLEX ELITE":l>=5?"🔥 BLITZ-PROFI":"🎯 BLITZ-ANFÄNGER"}
+function fmt(x){return x?x.toFixed(3)+" s":"—"}
+function updateHome(){state.level=level();$("homeLevel").textContent="LEVEL "+state.level;$("homeXp").textContent=state.xp+" XP";$("homeBest").textContent="BEST "+fmt(state.best);$("best").textContent=state.best?"BESTZEIT "+fmt(state.best):""}
+function startMatch(isDaily=false){dailyMode=isDaily;round=0;scores=[];show("game");startRound()}
+function startRound(){clearTimeout(timer);$("roundLabel").textContent=`RUNDE ${round+1} / 5`;$("modeLabel").textContent=dailyMode?"TAGES-CHALLENGE":"BLITZ PUR";$("gameCenter").textContent="...";$("gameCenter").style.fontSize="72px";$("gameHint").textContent="WARTE...";app.classList.remove("ready");phase="waiting";beep(220,70);timer=setTimeout(()=>{phase="ready";start=performance.now();app.classList.add("ready");$("gameCenter").textContent="JETZT!";$("gameHint").textContent="TIPPE!";beep(880,150);vib([30,30,80])},1000+Math.random()*3000)}
+app.addEventListener("pointerdown",e=>{if(phase==="waiting"||phase==="ready"||phase==="roundDone")tap()});
+function tap(){if(phase==="ready"){let s=(performance.now()-start)/1000;scores.push(s);round++;roundDone(s);return}if(phase==="waiting"){clearTimeout(timer);scores.push(null);round++;phase="roundDone";app.classList.remove("ready");$("gameCenter").textContent="ZU FRÜH!";$("gameHint").textContent="❌ TIPPEN FÜR WEITER";beep(140,240);vib([150,50,150]);return}if(phase==="roundDone"){round<5?startRound():finish()}}
+function roundDone(s){phase="roundDone";app.classList.remove("ready");$("gameCenter").textContent=s.toFixed(3)+" s";$("gameHint").textContent=round<5?"⚡ TIPPEN FÜR NÄCHSTE RUNDE":"🏁 TIPPEN FÜR ERGEBNIS";beep(s<.3?1200:650,100);vib(20);if(!state.best||s<state.best){state.best=s;save();$("best").textContent="🏆 NEUER REKORD "+fmt(s)}}
+function finish(){let valid=scores.filter(Boolean),avg=valid.length?valid.reduce((a,b)=>a+b,0)/valid.length:0;state.games++;if(valid.length===5)state.perfect++;let gain=100+Math.max(0,Math.round((.6-Math.min(avg||.6,.6))*500));if(valid.length===5)gain+=100;if(avg&&avg<.3)gain+=100;if(dailyMode){let key=new Date().toISOString().slice(0,10);state.daily[key]=avg;gain+=200}state.xp+=gain;state.level=level();state.history.unshift({avg,scores,date:Date.now()});state.history=state.history.slice(0,100);save();
+let msg=avg<.2?"🚀 Du bist schneller als dein eigener Gedanke. Bleib dran!":avg<.25?"⚡ Stark! Dein Reflex ist auf Angriff.":avg<.3?"🔥 Richtig stark! Jetzt jagst du deinen nächsten Rekord.":avg<.4?"💪 Guter Lauf! Jeder Versuch macht dich schneller.":avg<.5?"🎯 Du bist auf dem richtigen Weg. Noch eine Runde!":"🏃 Nicht aufgeben. Dein bester Lauf kommt noch.";
+$("resultTime").textContent=avg?avg.toFixed(3)+" s":"FEHLER";$("resultMotivation").textContent=msg+" · Dein nächstes Ziel: SCHNELLER ALS HEUTE. ⚡";$("resultMedal").textContent=avg<.2?"⚡ LICHTGESCHWINDIGKEIT":avg<.25?"🥇 REAKTIONS-MONSTER":avg<.3?"🥈 BLITZ-PROFI":avg<.4?"🥉 SCHNELL":"🔥 GUTER REFLEX";$("xpGain").textContent=`+${gain} XP · ${rank()}`;$("xpBar").style.width=((state.xp%1000)/10)+"%";show("result");updateProfile();updateLeaders();checkAchievements()}
+function showAchievement(title,reward){
+  $("toastTitle").textContent=title;
+  $("toastReward").textContent=`+${reward} XP · Neue Belohnung`;
+  $("blitzToast").classList.add("show");
+  beep(1500,90); setTimeout(()=>beep(1900,120),110); vib([40,40,80]);
+  setTimeout(()=>$("blitzToast").classList.remove("show"),3200);
+}
+function checkAchievements(){
+  const best=state.best||999, unlocked=state.achievements;
+  const a=[
+    ["⚡","Erster Blitz","Dein erster kompletter Lauf",50,state.games>=1],
+    ["🎯","500er Jäger","Bestzeit unter 500 ms",75,best<.5],
+    ["💪","400er Club","Bestzeit unter 400 ms",100,best<.4],
+    ["🔥","350er Feuer","Bestzeit unter 350 ms",125,best<.35],
+    ["💨","300er Club","Bestzeit unter 300 ms",150,best<.3],
+    ["⚡","275er Turbo","Bestzeit unter 275 ms",200,best<.275],
+    ["🥇","250er Elite","Bestzeit unter 250 ms",300,best<.25],
+    ["🚀","225er Rakete","Bestzeit unter 225 ms",400,best<.225],
+    ["👑","200er Legende","Bestzeit unter 200 ms",500,best<.2],
+    ["💠","175er Phantom","Bestzeit unter 175 ms",750,best<.175],
+    ["🌌","150er Hologramm","Bestzeit unter 150 ms",1000,best<.15],
+    ["🧠","10 Matches","10 Matches gespielt",150,state.games>=10],
+    ["🔥","Perfekt!","5 von 5 Runden gültig",200,state.perfect>=1],
+    ["🏆","100 Matches","100 Matches gespielt",500,state.games>=100],
+    ["💥","Combo x5","5 schnelle Treffer in Folge",250,(state.combo||0)>=5],
+    ["🔥","Combo x10","10 schnelle Treffer in Folge",500,(state.combo||0)>=10],
+    ["⚡","200 Matches","200 Matches gespielt",750,state.games>=200],
+    ["🌠","Speedrunner","Bestzeit unter 125 ms",1500,best<.125],
+    ["👽","Unmenschlich","Bestzeit unter 100 ms",2500,best<.1],
+    ["💎","Sammler","10 Achievements freigeschaltet",500,Object.keys(unlocked).length>=10],
+    ["👑","Meister","20 Achievements freigeschaltet",1000,Object.keys(unlocked).length>=20],
+    ["🌌","BLITZ-Gott","30 Achievements freigeschaltet",2500,Object.keys(unlocked).length>=30]
+  ];
+  let changed=false;
+  for(const [icon,title,desc,reward,ok] of a){
+    if(ok && !unlocked[title]){
+      unlocked[title]=Date.now(); state.xp+=reward; changed=true;
+      showAchievement(`${icon} ${title}`,reward);
+    }
+  }
+  if(changed){state.level=level();save();updateProfile();updateHome();}
+  $("achievements").innerHTML=a.map(x=>`
+    <div class="achievement ${unlocked[x[1]]?"unlocked":"locked"}">
+      <span class="medal">${x[0]}</span>
+      <div><b>${x[1]}</b><br><small>${x[2]}</small></div>
+      <span class="reward">${unlocked[x[1]]?`+${x[3]} XP`:`+${x[3]} XP`}</span>
+    </div>`).join("");
+}
+function updateProfile(){let vals=state.history.map(x=>x.avg).filter(Boolean),avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;$("profileLevel").textContent=`LEVEL ${level()} · ${state.xp} XP`;$("profileRank").textContent=rank();$("pBest").textContent=fmt(state.best);$("pAvg").textContent=fmt(avg);$("pGames").textContent=state.games;$("pPerfect").textContent=state.perfect}
+function updateLeaders(){let list=state.history.filter(x=>x.avg).sort((a,b)=>a.avg-b.avg).slice(0,10);$("leaders").innerHTML=list.length?list.map((x,i)=>`<div class="leader"><b>${["🥇","🥈","🥉"][i]||"⚡"} ${x.avg.toFixed(3)} s</b><span class="muted">lokal</span></div>`).join(""):"Noch keine Ergebnisse."}
+function daily(){let key=new Date().toISOString().slice(0,10),target=.3;let done=state.daily[key];$("dailyText").textContent="Schaffe heute einen 5-Runden-Schnitt unter 300 ms."; $("dailyTarget").textContent="ZIEL < 0.300 s";$("dailyBar").style.width=done?Math.min(100,Math.max(0,(.3-done)/.15*100))+"%":"0%";$("dailyStatus").textContent=done?`Heute geschafft: ${done.toFixed(3)} s 🔥`:"Noch offen";show("daily")}
+$("playBtn").onclick=()=>startMatch(false);$("dailyBtn").onclick=daily;$("dailyPlay").onclick=()=>startMatch(true);$("dailyHome").onclick=()=>show("home");$("againBtn").onclick=()=>startMatch(dailyMode);$("resultHome").onclick=()=>show("home");$("profileHome").onclick=()=>show("home");$("leaderHome").onclick=()=>show("home");$("backBtn").onclick=()=>{if(phase==="game"){clearTimeout(timer);show("home")}else show("home")};$("soundBtn").onclick=e=>{e.stopPropagation();sound=!sound;$("soundBtn").textContent=sound?"🔊":"🔇";if(sound){audioReady();beep(700,100)}};$("shareBtn").onclick=async()=>{let avg=scores.filter(Boolean);avg=avg.length?avg.reduce((a,b)=>a+b,0)/avg.length:0;let u=new URL(location.href);u.searchParams.set("challenge",avg.toFixed(3));let text=`⚡ BLITZ! Ich habe ${avg.toFixed(3)} s geschafft. Schlägst du mich?`;if(navigator.share)await navigator.share({title:"BLITZ Challenge",text,url:u.href});else{await navigator.clipboard.writeText(text+" "+u.href);alert("Challenge-Link kopiert!")}};
+updateHome();updateProfile();updateLeaders();checkAchievements();
+</script>
+
+<script>
+const proBtnHome=document.getElementById("proBtn"), shopBtnHome=document.getElementById("shopBtn"),
+leaderBtnHome=document.getElementById("leaderBtn"), profileBtnHome=document.getElementById("profileBtn");
+proBtnHome.onclick=()=>show("pro");shopBtnHome.onclick=()=>show("shop");
+leaderBtnHome.onclick=()=>show("leaderboard");profileBtnHome.onclick=()=>show("profile");
+document.getElementById("shopHome").onclick=()=>show("home");document.getElementById("proHome").onclick=()=>show("home");
+document.getElementById("proBtnBuy").onclick=()=>{localStorage.setItem("blitz_pro_demo","1");alert("BLITZ PRO ist im Demo-Modus aktiviert 👑");};
+document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>alert(b.dataset.buy+" ist im Demo-Shop ausgewählt. Die echte Google-Play-Zahlung kommt erst in der Android-Version."));
+</script>
+
+<script id="blitz-home-upgrade-js">
+(function(){
+  const best = localStorage.getItem("bestTime") || localStorage.getItem("blitz_best") || "";
+  const xp = localStorage.getItem("xp") || "0";
+  const level = localStorage.getItem("level") || "1";
+  const hb=document.getElementById("heroBest"), hx=document.getElementById("heroXP"), hl=document.getElementById("heroLevel");
+  if(hb) hb.textContent = best ? best + " ms" : "—";
+  if(hx) hx.textContent = xp;
+  if(hl) hl.textContent = level;
+
+  const start=document.getElementById("startBlitzBtn");
+  const daily=document.getElementById("heroDaily");
+  const rank=document.getElementById("heroRank");
+  function clickId(id){const el=document.getElementById(id); if(el) el.click();}
+  if(start) start.onclick=function(){
+    const candidates=["startBtn","playBtn","startGame","beginBtn"];
+    for(const id of candidates){if(document.getElementById(id)){clickId(id);return;}}
+    const game=document.querySelector('[id*="game" i],.game');
+    if(game && game.scrollIntoView) game.scrollIntoView({behavior:"smooth"});
+  };
+  if(daily) daily.onclick=function(){clickId("dailyBtn");};
+  if(rank) rank.onclick=function(){clickId("leaderBtn");};
+})();
+</script>
+
+<script id="blitz-progression-js">
+(function(){
+  const btn=document.getElementById("claimDaily"), pop=document.getElementById("xpPop");
+  const today=new Date().toISOString().slice(0,10);
+  if(btn){
+    if(state.lastDaily===today){btn.disabled=true;btn.textContent="ABGEHOLT";}
+    btn.onclick=function(){
+      if(state.lastDaily===today)return;
+      state.lastDaily=today; state.xp += Math.round(50 * (1 + Math.min((state.combo||0)*0.05,0.5))); state.level=level(); save(); updateProfile(); updateHome();
+      btn.disabled=true;btn.textContent="ABGEHOLT";
+      pop.textContent="+50 XP 🎁"; pop.classList.add("show"); beep(1200,100); setTimeout(()=>pop.classList.remove("show"),1300);
+      checkAchievements();
+    };
+  }
+  const hc=document.getElementById("heroCombo"); if(hc) hc.textContent=(state.combo||0)+"x";
+})();
+</script>
+</body>
+</html>
